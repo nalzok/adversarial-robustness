@@ -8,7 +8,7 @@ from flax.training import train_state
 import optax
 
 from .resnet import ResNet18
-from .centroids import avg_dist
+from .distances import avg_distance
 
 
 class TrainState(train_state.TrainState):
@@ -41,13 +41,8 @@ def train_step(state, image, label):
         embedding = embedding.reshape(embedding.shape[0], -1)
 
         predictive_term = optax.softmax_cross_entropy_with_integer_labels(logits, label)
-        norm_regularizer = 2 * jnp.linalg.norm(embedding, axis=1)
-        dist_regularizer = avg_dist(embedding, state.centroids)
-        # print('======> predictive_term', predictive_term.sum())
-        # print('======> norm_regularizer', norm_regularizer.sum())
-        # print('======> dist_regularizer', dist_regularizer.sum())
-        # print('======> dist_regularizer / norm_regularizer', (dist_regularizer/norm_regularizer).mean())
-        loss = (predictive_term - 0.0 * image.shape[0] * dist_regularizer / norm_regularizer).sum()
+        dist_regularizer = avg_distance(embedding, state.centroids, label)
+        loss = (predictive_term - 0 * image.shape[0]/64 * dist_regularizer).sum()
 
         return loss, (embedding, new_model_state)
 
@@ -58,7 +53,7 @@ def train_step(state, image, label):
     count = jnp.bincount(label, length=num_classes)
     centroids = vbincount(embedding)/count[:, jnp.newaxis]
 
-    momentum = 1 - 0.8 * count/image.shape[0]   # TODO: improve this
+    momentum = 1 - 0.8 * count/image.shape[0]   # TODO: improve this heuristic
     new_centroids = momentum[:, jnp.newaxis] * state.centroids + (1-momentum[:, jnp.newaxis]) * centroids
 
     state = state.apply_gradients(
