@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from .train import create_train_state, train_step, test_step
-from .distances import avg_distance
+from .distances import avg_distance, min_distance
 from .attacks import pgd_attack
 
 
@@ -34,9 +34,10 @@ def run(learning_rate, num_epochs, batch_size):
             state, loss = train_step(state, image, label)
             pbar.set_description(f"{loss.item()=:.2f}")
 
-        distances = avg_distance(state.centroids, state.centroids, jnp.arange(state.centroids.shape[0]))
-        print("avg_dist(state.centroids)", distances.round(2))
-        print("norm(state.centroids)", jnp.linalg.norm(state.centroids, axis=-1))
+        avg_dist = avg_distance(state.centroids, state.centroids, jnp.arange(state.centroids.shape[0]))
+        min_dist = min_distance(state.centroids, state.centroids, jnp.arange(state.centroids.shape[0]))
+        print("avg_dist(state.centroids)", avg_dist.round(2))
+        print("min_dist(state.centroids)", min_dist.round(2))
 
     # Construct adversial examples with PGD for the test set
     test_loader = DataLoader(test_dataset, 1024)

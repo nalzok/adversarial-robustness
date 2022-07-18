@@ -8,7 +8,7 @@ from flax.training import train_state
 import optax
 
 from .resnet import ResNet18
-from .distances import avg_distance
+from .distances import avg_distance, min_distance
 
 
 class TrainState(train_state.TrainState):
@@ -41,8 +41,8 @@ def train_step(state, image, label):
         embedding = embedding.reshape(embedding.shape[0], -1)
 
         predictive_term = optax.softmax_cross_entropy_with_integer_labels(logits, label)
-        dist_regularizer = avg_distance(embedding, state.centroids, label)
-        loss = (predictive_term - 0 * image.shape[0]/64 * dist_regularizer).sum()
+        dist_regularizer = min_distance(embedding, state.centroids, label)
+        loss = (predictive_term - dist_regularizer).sum()
 
         return loss, (embedding, new_model_state)
 
