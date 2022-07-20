@@ -3,7 +3,6 @@ import jax.numpy as jnp
 import numpy as np
 from torchvision.datasets import CIFAR10
 from torch.utils.data import DataLoader
-from tqdm import tqdm
 
 from .train import create_train_state, train_step, test_step
 from .distances import avg_distance, min_distance
@@ -25,19 +24,26 @@ def run(learning_rate, num_epochs, batch_size):
     key = jax.random.PRNGKey(42)
     state = create_train_state(key, 10, learning_rate, specimen)
 
-    for _ in range(num_epochs):
+    for epoch in range(num_epochs):
+        last_centroids = state.centroids
         train_loader = DataLoader(train_dataset, batch_size)
-        pbar = tqdm(train_loader)
-        for X, y in pbar:
+        epoch_loss = 0
+        epoch_dispersion = 0
+        for X, y in train_loader:
             image = jnp.array(X)
             label = jnp.array(y)
-            state, loss = train_step(state, image, label)
-            pbar.set_description(f"{loss.item()=:.2f}")
+            state, loss, dispersion = train_step(state, image, label)
+            epoch_loss += loss
+            epoch_dispersion += dispersion
 
         avg_dist = avg_distance(state.centroids, state.centroids, jnp.arange(state.centroids.shape[0]))
         min_dist = min_distance(state.centroids, state.centroids, jnp.arange(state.centroids.shape[0]))
-        print("avg_dist(state.centroids)", avg_dist.round(2))
-        print("min_dist(state.centroids)", min_dist.round(2))
+        angle = jnp.arccos(jnp.sum(state.centroids * last_centroids, axis=-1)/state.centroids.shape[1])
+        with jnp.printoptions(precision=3):
+            print(f"===> Epoch {epoch + 1}, train loss: {epoch_loss}, dispersion: {epoch_dispersion}")
+            print("avg_dist(state.centroids)", avg_dist)
+            print("min_dist(state.centroids)", min_dist)
+            print("angle", angle)
 
     # Construct adversial examples with PGD for the test set
     test_loader = DataLoader(test_dataset, 1024)
@@ -60,8 +66,8 @@ def run(learning_rate, num_epochs, batch_size):
 
 
 if __name__ == "__main__":
-    learning_rate = 1e-2
-    num_epochs = 8
+    learning_rate = 1e-4
+    num_epochs = 512
     batch_size = 256
     run(learning_rate, num_epochs, batch_size)
 

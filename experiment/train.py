@@ -8,7 +8,7 @@ from flax.training import train_state
 import optax
 
 from .resnet import ResNet18
-from .distances import avg_distance, min_distance
+from .distances import pushpull_distance, dispersion
 
 
 class TrainState(train_state.TrainState):
@@ -41,20 +41,21 @@ def train_step(state, image, label):
         embedding = embedding.reshape(embedding.shape[0], -1)
 
         predictive_term = optax.softmax_cross_entropy_with_integer_labels(logits, label)
-        dist_regularizer = min_distance(embedding, state.centroids, label)
-        loss = (predictive_term - dist_regularizer).sum()
+        dist_regularizer = pushpull_distance(embedding, state.centroids, label)
+        disp = pushpull_distance(embedding, state.centroids, label)
+        loss = (predictive_term + dist_regularizer).sum()
 
-        return loss, (embedding, new_model_state)
+        return loss, (embedding, disp, new_model_state)
 
-    (loss, (embedding, new_model_state)), grads = loss_fn(state.params)
+    (loss, (embedding, disp, new_model_state)), grads = loss_fn(state.params)
 
     num_classes = state.centroids.shape[0]
     vbincount = jax.vmap(lambda X: jnp.bincount(label, weights=X, length=num_classes), in_axes=1, out_axes=1)
     count = jnp.bincount(label, length=num_classes)
     centroids = vbincount(embedding)/count[:, jnp.newaxis]
 
-    momentum = 1 - 0.8 * count/image.shape[0]   # TODO: improve this heuristic
-    new_centroids = momentum[:, jnp.newaxis] * state.centroids + (1-momentum[:, jnp.newaxis]) * centroids
+    new_centroids = state.centroids + centroids
+    new_centroids = jax.nn.standardize(new_centroids)
 
     state = state.apply_gradients(
         grads=grads,
@@ -62,7 +63,7 @@ def train_step(state, image, label):
         centroids=new_centroids
     )
 
-    return state, loss
+    return state, loss, disp
 
 
 @jax.jit

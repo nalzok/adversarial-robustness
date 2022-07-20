@@ -1,9 +1,11 @@
+from functools import partial
+
 import jax
 import jax.numpy as jnp
 import optax
 
 
-@jax.jit
+@partial(jax.jit, static_argnums=(3, 4))
 def pgd_attack(image, target, state, epsilon=0.1, maxiter=10):
     image_perturbation = jnp.zeros_like(image)
 
