@@ -5,23 +5,24 @@ import jax.numpy as jnp
 import optax
 
 
-@partial(jax.jit, static_argnums=(3, 4))
-def pgd_attack(image, target, state, epsilon=0.1, maxiter=10):
-    image_perturbation = jnp.zeros_like(image)
+@partial(jax.jit, static_argnames=('epsilon', 'max_steps', 'step_size'))
+def pgd_untargeted(key, state, image, label, /, *, epsilon, max_steps, step_size):
+    image_adv = image + jax.random.uniform(key, image.shape, minval=-epsilon, maxval=epsilon)
+
+    lower = jnp.clip(image - epsilon, 0, 1)
+    upper = jnp.clip(image + epsilon, 0, 1)
+    image_adv = jnp.clip(image_adv, lower, upper)
 
     @jax.grad
-    def loss_fn(perturbation):
+    def loss_fn(image_adv):
         variables = {'params': state.params, 'batch_stats': state.batch_stats}
-        logits, _ = state.apply_fn(variables, image + perturbation, False)
-        loss = optax.softmax_cross_entropy(logits, target)
+        logit = state.apply_fn(variables, image_adv, False)
+        loss = optax.softmax_cross_entropy_with_integer_labels(logit, label)
         return loss.sum()
 
-    for _ in range(maxiter):
-        # compute gradient of the loss wrt to the image
-        sign_grad = jnp.sign(loss_fn(image_perturbation))
-        # heuristic step-size 2 eps / maxiter
-        image_perturbation -= (2 * epsilon / maxiter) * sign_grad
-        # projection step onto the L-infinity ball centered at image
-        image_perturbation = jnp.clip(image_perturbation, -epsilon, epsilon)
+    for _ in range(max_steps):
+        sign_grad = jnp.sign(loss_fn(image_adv))
+        image_adv += step_size * sign_grad      # we want to increase the loss
+        image_adv = jnp.clip(image_adv, lower, upper)
 
-    return jnp.clip(image + image_perturbation, 0, 1)
+    return image_adv

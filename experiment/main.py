@@ -1,60 +1,61 @@
 import jax
 import jax.numpy as jnp
 import numpy as np
-from torchvision.datasets import CIFAR10
+import torch
 from torch.utils.data import DataLoader
+from torchvision.datasets import CIFAR10
+import torchvision.transforms as T
 
 from .train import create_train_state, train_step, test_step
-from .distances import avg_distance, min_distance
-from .attacks import pgd_attack
+from .attacks import pgd_untargeted
 
 
 def run(learning_rate, num_epochs, batch_size):
     root = "/usr/local/share/torchvision/datasets"
-    mean_rgb = np.array((0.4914, 0.4822, 0.4465))
-    std_rgb = np.array((0.247, 0.243, 0.261))
     specimen = jnp.empty((32, 32, 3))
 
-    def transform(x):
-        return ((np.array(x) / 255. - mean_rgb) / std_rgb).reshape(specimen.shape)
+    mean_rgb = np.array((0.4914, 0.4822, 0.4465))
+    std_rgb = np.array((0.247, 0.243, 0.261))
+    transform = T.Compose([
+        T.ToTensor(),
+        T.Normalize(mean_rgb, std_rgb),
+        lambda X: torch.permute(X, (1, 2, 0)),
+    ])
 
     train_dataset = CIFAR10(root, train=True, download=True, transform=transform)
     test_dataset = CIFAR10(root, train=False, download=True, transform=transform)
 
     key = jax.random.PRNGKey(42)
-    state = create_train_state(key, 10, learning_rate, specimen)
+    key_init, key = jax.random.split(key)
+    state = create_train_state(key_init, 10, learning_rate, specimen)
 
+    # Adversarial Training with PGD
     for epoch in range(num_epochs):
-        last_centroids = state.centroids
         train_loader = DataLoader(train_dataset, batch_size)
         epoch_loss = 0
-        epoch_dispersion = 0
         for X, y in train_loader:
             image = jnp.array(X)
             label = jnp.array(y)
-            state, loss, dispersion = train_step(state, image, label)
+
+            key_attack, key = jax.random.split(key)
+            image_adv = pgd_untargeted(key_attack, state, image, label, epsilon=8/255, max_steps=100, step_size=0.01)
+
+            state, loss = train_step(state, image, image_adv, label)
             epoch_loss += loss
-            epoch_dispersion += dispersion
 
-        avg_dist = avg_distance(state.centroids, state.centroids, jnp.arange(state.centroids.shape[0]))
-        min_dist = min_distance(state.centroids, state.centroids, jnp.arange(state.centroids.shape[0]))
-        angle = jnp.arccos(jnp.sum(state.centroids * last_centroids, axis=-1)/state.centroids.shape[1])
         with jnp.printoptions(precision=3):
-            print(f"===> Epoch {epoch + 1}, train loss: {epoch_loss}, dispersion: {epoch_dispersion}")
-            print("avg_dist(state.centroids)", avg_dist)
-            print("min_dist(state.centroids)", min_dist)
-            print("angle", angle)
+            print(f"===> Epoch {epoch + 1}, train loss: {epoch_loss}")
 
-    # Construct adversial examples with PGD for the test set
-    test_loader = DataLoader(test_dataset, 1024)
+    # Evaluate adversarial accuracy
+    test_loader = DataLoader(test_dataset, batch_size)
 
     total_hits_orig, total_hits_adv = 0, 0
     for X, y in test_loader:
         image = jnp.array(X)
         label = jnp.array(y)
 
-        target = jax.nn.one_hot((label + 1) % 10, 10)
-        adversary = pgd_attack(image, target, state)
+        key_attack, key = jax.random.split(key)
+        adversary = pgd_untargeted(key_attack, state, image, label, epsilon=8/255, max_steps=100, step_size=0.01)
 
         total_hits_orig += test_step(state, image, label)
         total_hits_adv += test_step(state, adversary, label)
@@ -66,8 +67,8 @@ def run(learning_rate, num_epochs, batch_size):
 
 
 if __name__ == "__main__":
-    learning_rate = 1e-4
-    num_epochs = 512
+    learning_rate = 1e-3
+    num_epochs = 8
     batch_size = 256
     run(learning_rate, num_epochs, batch_size)
 

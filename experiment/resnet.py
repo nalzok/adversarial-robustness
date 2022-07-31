@@ -125,11 +125,9 @@ class ResNet(nn.Module):
                     act=self.act,
                 )(x)
         x = jnp.mean(x, axis=(-3, -2))
-        x = nn.LayerNorm(use_bias=False, use_scale=False)(x)
-        embedding = x
         x = nn.Dense(self.num_classes, dtype=self.dtype)(x)
         x = jnp.asarray(x, self.dtype)
-        return x, embedding
+        return x
 
 
 ResNet18 = partial(ResNet, stage_sizes=[2, 2, 2, 2], block_cls=ResNetBlock)
