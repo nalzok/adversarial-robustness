@@ -11,7 +11,7 @@ from .attacks import pgd_untargeted
 
 
 def run(learning_rate, num_epochs, batch_size):
-    root = "/usr/local/share/torchvision/datasets"
+    root = "/home/qys/torchvision/datasets"
     specimen = jnp.empty((32, 32, 3))
 
     mean_rgb = np.array((0.4914, 0.4822, 0.4465))
