@@ -35,10 +35,9 @@ def train_step(state, image, image_adv, label):
             variables, image_adv, True, mutable=['batch_stats']
         )
 
-        predictive_term = optax.softmax_cross_entropy_with_integer_labels(logits, label)
-        loss = predictive_term.sum()
+        loss = optax.softmax_cross_entropy_with_integer_labels(logits, label)
 
-        return loss, new_model_state
+        return loss.sum(), new_model_state
 
     (loss, new_model_state), grads = loss_fn(state.params)
 

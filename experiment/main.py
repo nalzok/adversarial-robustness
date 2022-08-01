@@ -38,7 +38,8 @@ def run(learning_rate, num_epochs, batch_size):
             label = jnp.array(y)
 
             key_attack, key = jax.random.split(key)
-            image_adv = pgd_untargeted(key_attack, state, image, label, epsilon=8/255, max_steps=100, step_size=0.01)
+            image_adv = pgd_untargeted(key_attack, state, image, label,
+                    epsilon=16/255, max_steps=2000, step_size=1/255, randomize=True)
 
             state, loss = train_step(state, image, image_adv, label)
             epoch_loss += loss
@@ -55,7 +56,8 @@ def run(learning_rate, num_epochs, batch_size):
         label = jnp.array(y)
 
         key_attack, key = jax.random.split(key)
-        adversary = pgd_untargeted(key_attack, state, image, label, epsilon=8/255, max_steps=100, step_size=0.01)
+        adversary = pgd_untargeted(key_attack, state, image, label,
+                epsilon=16/255, max_steps=2000, step_size=1/255, randomize=False)
 
         total_hits_orig += test_step(state, image, label)
         total_hits_adv += test_step(state, adversary, label)
