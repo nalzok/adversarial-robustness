@@ -14,6 +14,7 @@ torchvision = "==0.13.0"
 torch-xla = {file = "https://storage.googleapis.com/tpu-pytorch/wheels/tpuvm/torch_xla-1.12-cp38-cp38-linux_x86_64.whl", extras = ["tpuvm"]}
 matplotlib = "*"
 tqdm = "*"
+click = "*"
 
 [dev-packages]
 black = "*"
