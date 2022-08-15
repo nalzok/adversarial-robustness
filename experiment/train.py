@@ -14,20 +14,7 @@ class TrainState(train_state.TrainState):
     batch_stats: flax.core.FrozenDict[str, jnp.ndarray]
 
 
-def create_learning_rate(learning_rate: float, swa_lr: float, swa_start: int, steps_per_epoch: int) -> Callable:
-    # Adapted from https://github.com/timgaripov/swa/blob/411b2fcad59bec60c6c9eb1eb19ab906540e5ea2/train.py#L94-L103
-    def schedule(step):
-        epoch = step / steps_per_epoch
-        t = epoch / swa_start
-        xp = jnp.array((0.5, 0.9))
-        fp = jnp.array((learning_rate, swa_lr))
-        lr = jnp.interp(t, xp, fp, learning_rate, swa_lr)
-        return lr
-
-    return schedule
-
-
-def create_train_state(key: Any, num_classes: int, learning_rate: Callable, specimen: jnp.ndarray) -> TrainState:
+def create_train_state(key: Any, num_classes: int, learning_rate: float, specimen: jnp.ndarray) -> TrainState:
     net = ResNet18(num_classes=num_classes)
     variables = net.init(key, specimen, True)
     tx = optax.adam(learning_rate)
@@ -38,6 +25,14 @@ def create_train_state(key: Any, num_classes: int, learning_rate: Callable, spec
             batch_stats=variables['batch_stats'],
     )
     return state
+
+
+def create_finetune_state(state: TrainState, learning_rate: float) -> TrainState:
+    tx = optax.adam(learning_rate)
+    opt_state = tx.init(state.params)   # resets momentum, etc.
+    state = state.replace(step=0, tx=tx, opt_state=opt_state)
+    return state
+
 
 
 @partial(jax.pmap, axis_name='batch')
