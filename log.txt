@@ -1,0 +1,438 @@
+$ make
+time pipenv run python3 \
+        -m experiment.main \
+        --adv_epsilon 8 \
+        --pgd_iters 500 \
+        --batch_size 256 \
+        --pretrain_epochs 64 \
+        --lr 5e-3 \
+        --swa_epochs 64 \
+        --swa_lr 5e-3 \
+        --swa_lr 4e-3 \
+        --swa_lr 3e-3 \
+        --swa_lr 2e-3 \
+        --swa_lr 1e-3
+WARNING:absl:Initialized persistent compilation cache at jit_cache
+Files already downloaded and verified
+Files already downloaded and verified
+===> Pretraining
+Epoch 1, train loss: 108593.375
+Epoch 2, train loss: 98107.4921875
+Epoch 3, train loss: 85974.625
+Epoch 4, train loss: 76866.90625
+Epoch 5, train loss: 68870.125
+Epoch 6, train loss: 61743.4296875
+Epoch 7, train loss: 55289.3828125
+Epoch 8, train loss: 49085.31640625
+Epoch 9, train loss: 44243.04296875
+Epoch 10, train loss: 40047.484375
+Epoch 11, train loss: 36018.84375
+Epoch 12, train loss: 31741.099609375
+Epoch 13, train loss: 28083.67578125
+Epoch 14, train loss: 25124.572265625
+Epoch 15, train loss: 21559.06640625
+Epoch 16, train loss: 19560.1640625
+Epoch 17, train loss: 16656.345703125
+Epoch 18, train loss: 14914.6591796875
+Epoch 19, train loss: 13416.408203125
+Epoch 20, train loss: 12262.29296875
+Epoch 21, train loss: 10798.517578125
+Epoch 22, train loss: 9873.7265625
+Epoch 23, train loss: 8665.75390625
+Epoch 24, train loss: 8078.64501953125
+Epoch 25, train loss: 7306.38232421875
+Epoch 26, train loss: 7099.68505859375
+Epoch 27, train loss: 6486.93359375
+Epoch 28, train loss: 6338.1083984375
+Epoch 29, train loss: 5964.26171875
+Epoch 30, train loss: 5595.50439453125
+Epoch 31, train loss: 5887.36474609375
+Epoch 32, train loss: 6045.8427734375
+Epoch 33, train loss: 5612.32763671875
+Epoch 34, train loss: 5093.50927734375
+Epoch 35, train loss: 4287.39404296875
+Epoch 36, train loss: 3901.9140625
+Epoch 37, train loss: 4012.860595703125
+Epoch 38, train loss: 4202.18017578125
+Epoch 39, train loss: 3918.068359375
+Epoch 40, train loss: 4261.541015625
+Epoch 41, train loss: 3976.224365234375
+Epoch 42, train loss: 3703.405029296875
+Epoch 43, train loss: 3761.001220703125
+Epoch 44, train loss: 3380.67333984375
+Epoch 45, train loss: 3693.89306640625
+Epoch 46, train loss: 3522.90966796875
+Epoch 47, train loss: 3393.8154296875
+Epoch 48, train loss: 2922.91943359375
+Epoch 49, train loss: 2583.84130859375
+Epoch 50, train loss: 2695.26123046875
+Epoch 51, train loss: 3083.944580078125
+Epoch 52, train loss: 3084.796142578125
+Epoch 53, train loss: 2552.06640625
+Epoch 54, train loss: 2829.913818359375
+Epoch 55, train loss: 3157.649658203125
+Epoch 56, train loss: 2986.881591796875
+Epoch 57, train loss: 2206.1123046875
+Epoch 58, train loss: 2248.216064453125
+Epoch 59, train loss: 1994.4713134765625
+Epoch 60, train loss: 2101.371826171875
+Epoch 61, train loss: 2455.5595703125
+Epoch 62, train loss: 2589.185302734375
+Epoch 63, train loss: 2472.367431640625
+Epoch 64, train loss: 2128.75146484375
+===> SWA
+---> Finetuning with lr = 0.005
+Epoch 1, finetune loss: 2477.384033203125
+Epoch 2, finetune loss: 2373.471923828125
+Epoch 3, finetune loss: 2242.349609375
+Epoch 4, finetune loss: 1978.568603515625
+Epoch 5, finetune loss: 2027.6513671875
+Epoch 6, finetune loss: 2348.962646484375
+Epoch 7, finetune loss: 2296.03076171875
+Epoch 8, finetune loss: 1831.7530517578125
+Epoch 9, finetune loss: 1629.1787109375
+Epoch 10, finetune loss: 1434.2215576171875
+Epoch 11, finetune loss: 2220.12060546875
+Epoch 12, finetune loss: 2033.6866455078125
+Epoch 13, finetune loss: 1668.32373046875
+Epoch 14, finetune loss: 1683.59423828125
+Epoch 15, finetune loss: 1799.9908447265625
+Epoch 16, finetune loss: 1588.23388671875
+Epoch 17, finetune loss: 1433.59619140625
+Epoch 18, finetune loss: 1782.340087890625
+Epoch 19, finetune loss: 1531.6846923828125
+Epoch 20, finetune loss: 1605.598388671875
+Epoch 21, finetune loss: 1472.5625
+Epoch 22, finetune loss: 1529.3861083984375
+Epoch 23, finetune loss: 1146.7357177734375
+Epoch 24, finetune loss: 1228.9273681640625
+Epoch 25, finetune loss: 1408.9776611328125
+Epoch 26, finetune loss: 2103.521240234375
+Epoch 27, finetune loss: 1847.218994140625
+Epoch 28, finetune loss: 1576.79443359375
+Epoch 29, finetune loss: 1145.1068115234375
+Epoch 30, finetune loss: 1104.3470458984375
+Epoch 31, finetune loss: 1117.5302734375
+Epoch 32, finetune loss: 1461.52685546875
+Epoch 33, finetune loss: 1447.1669921875
+Epoch 34, finetune loss: 1252.4024658203125
+Epoch 35, finetune loss: 1405.6689453125
+Epoch 36, finetune loss: 1345.3714599609375
+Epoch 37, finetune loss: 1533.6435546875
+Epoch 38, finetune loss: 1247.4739990234375
+Epoch 39, finetune loss: 1082.5469970703125
+Epoch 40, finetune loss: 1281.936767578125
+Epoch 41, finetune loss: 1184.220458984375
+Epoch 42, finetune loss: 1152.27099609375
+Epoch 43, finetune loss: 812.4458618164062
+Epoch 44, finetune loss: 1045.6292724609375
+Epoch 45, finetune loss: 828.9284057617188
+Epoch 46, finetune loss: 1478.0118408203125
+Epoch 47, finetune loss: 1569.4102783203125
+Epoch 48, finetune loss: 1227.9954833984375
+Epoch 49, finetune loss: 1016.553466796875
+Epoch 50, finetune loss: 945.9168701171875
+Epoch 51, finetune loss: 908.0813598632812
+Epoch 52, finetune loss: 934.9452514648438
+Epoch 53, finetune loss: 1605.712890625
+Epoch 54, finetune loss: 1554.2333984375
+Epoch 55, finetune loss: 1302.1973876953125
+Epoch 56, finetune loss: 810.7315673828125
+Epoch 57, finetune loss: 498.3269348144531
+Epoch 58, finetune loss: 485.51873779296875
+Epoch 59, finetune loss: 744.8486938476562
+Epoch 60, finetune loss: 1214.6922607421875
+Epoch 61, finetune loss: 2266.564208984375
+Epoch 62, finetune loss: 1309.9947509765625
+Epoch 63, finetune loss: 828.93017578125
+Epoch 64, finetune loss: 559.931396484375
+---> Finetuning with lr = 0.004
+Epoch 1, finetune loss: 1794.4891357421875
+Epoch 2, finetune loss: 1478.47998046875
+Epoch 3, finetune loss: 1459.755126953125
+Epoch 4, finetune loss: 1259.1705322265625
+Epoch 5, finetune loss: 1294.4459228515625
+Epoch 6, finetune loss: 1616.914794921875
+Epoch 7, finetune loss: 1749.95068359375
+Epoch 8, finetune loss: 1200.3587646484375
+Epoch 9, finetune loss: 873.4630737304688
+Epoch 10, finetune loss: 950.1087036132812
+Epoch 11, finetune loss: 990.4803466796875
+Epoch 12, finetune loss: 1429.109619140625
+Epoch 13, finetune loss: 1514.6636962890625
+Epoch 14, finetune loss: 1368.2974853515625
+Epoch 15, finetune loss: 1372.28466796875
+Epoch 16, finetune loss: 1539.037353515625
+Epoch 17, finetune loss: 1182.4122314453125
+Epoch 18, finetune loss: 1167.151123046875
+Epoch 19, finetune loss: 962.6223754882812
+Epoch 20, finetune loss: 843.892822265625
+Epoch 21, finetune loss: 884.0205688476562
+Epoch 22, finetune loss: 1125.0634765625
+Epoch 23, finetune loss: 908.6881713867188
+Epoch 24, finetune loss: 1081.9166259765625
+Epoch 25, finetune loss: 943.8162841796875
+Epoch 26, finetune loss: 1313.4847412109375
+Epoch 27, finetune loss: 1408.369140625
+Epoch 28, finetune loss: 1131.59716796875
+Epoch 29, finetune loss: 1068.0013427734375
+Epoch 30, finetune loss: 982.2094116210938
+Epoch 31, finetune loss: 905.6122436523438
+Epoch 32, finetune loss: 1178.7984619140625
+Epoch 33, finetune loss: 1047.3077392578125
+Epoch 34, finetune loss: 977.8178100585938
+Epoch 35, finetune loss: 991.8621215820312
+Epoch 36, finetune loss: 836.8842163085938
+Epoch 37, finetune loss: 661.3075561523438
+Epoch 38, finetune loss: 782.3240356445312
+Epoch 39, finetune loss: 1212.2745361328125
+Epoch 40, finetune loss: 1126.542724609375
+Epoch 41, finetune loss: 1039.0130615234375
+Epoch 42, finetune loss: 1017.080322265625
+Epoch 43, finetune loss: 863.3873291015625
+Epoch 44, finetune loss: 860.5114135742188
+Epoch 45, finetune loss: 658.9307861328125
+Epoch 46, finetune loss: 527.9386596679688
+Epoch 47, finetune loss: 825.1927490234375
+Epoch 48, finetune loss: 832.3192749023438
+Epoch 49, finetune loss: 1055.4730224609375
+Epoch 50, finetune loss: 1114.30712890625
+Epoch 51, finetune loss: 746.3527221679688
+Epoch 52, finetune loss: 764.8412475585938
+Epoch 53, finetune loss: 656.2872314453125
+Epoch 54, finetune loss: 932.112060546875
+Epoch 55, finetune loss: 1064.66943359375
+Epoch 56, finetune loss: 1219.2392578125
+Epoch 57, finetune loss: 864.564697265625
+Epoch 58, finetune loss: 621.1826171875
+Epoch 59, finetune loss: 437.2153625488281
+Epoch 60, finetune loss: 620.8958129882812
+Epoch 61, finetune loss: 797.8193969726562
+Epoch 62, finetune loss: 857.7352294921875
+Epoch 63, finetune loss: 1085.307861328125
+Epoch 64, finetune loss: 1120.95458984375
+---> Finetuning with lr = 0.003
+Epoch 1, finetune loss: 1227.104736328125
+Epoch 2, finetune loss: 781.3877563476562
+Epoch 3, finetune loss: 593.1865234375
+Epoch 4, finetune loss: 571.9966430664062
+Epoch 5, finetune loss: 1196.5628662109375
+Epoch 6, finetune loss: 1482.506103515625
+Epoch 7, finetune loss: 923.792724609375
+Epoch 8, finetune loss: 578.8483276367188
+Epoch 9, finetune loss: 475.27978515625
+Epoch 10, finetune loss: 393.04693603515625
+Epoch 11, finetune loss: 601.3057250976562
+Epoch 12, finetune loss: 673.025390625
+Epoch 13, finetune loss: 1271.5401611328125
+Epoch 14, finetune loss: 1289.8126220703125
+Epoch 15, finetune loss: 887.1004638671875
+Epoch 16, finetune loss: 545.6624145507812
+Epoch 17, finetune loss: 413.2019958496094
+Epoch 18, finetune loss: 342.7541198730469
+Epoch 19, finetune loss: 293.67547607421875
+Epoch 20, finetune loss: 376.01617431640625
+Epoch 21, finetune loss: 943.5541381835938
+Epoch 22, finetune loss: 1768.650634765625
+Epoch 23, finetune loss: 1358.6312255859375
+Epoch 24, finetune loss: 685.3092041015625
+Epoch 25, finetune loss: 247.46383666992188
+Epoch 26, finetune loss: 117.71537780761719
+Epoch 27, finetune loss: 54.514102935791016
+Epoch 28, finetune loss: 53.635948181152344
+Epoch 29, finetune loss: 63.16604232788086
+Epoch 30, finetune loss: 46.53687286376953
+Epoch 31, finetune loss: 29.60724639892578
+Epoch 32, finetune loss: 27.930770874023438
+Epoch 33, finetune loss: 27.163692474365234
+Epoch 34, finetune loss: 22.24304962158203
+Epoch 35, finetune loss: 20.557411193847656
+Epoch 36, finetune loss: 20.649120330810547
+Epoch 37, finetune loss: 3241.566162109375
+Epoch 38, finetune loss: 4745.25927734375
+Epoch 39, finetune loss: 1536.3076171875
+Epoch 40, finetune loss: 494.76190185546875
+Epoch 41, finetune loss: 142.09237670898438
+Epoch 42, finetune loss: 63.81491470336914
+Epoch 43, finetune loss: 48.79970932006836
+Epoch 44, finetune loss: 39.34951400756836
+Epoch 45, finetune loss: 34.2479133605957
+Epoch 46, finetune loss: 30.78384017944336
+Epoch 47, finetune loss: 30.30091094970703
+Epoch 48, finetune loss: 25.950510025024414
+Epoch 49, finetune loss: 24.622697830200195
+Epoch 50, finetune loss: 25.276992797851562
+Epoch 51, finetune loss: 20.008716583251953
+Epoch 52, finetune loss: 19.21870994567871
+Epoch 53, finetune loss: 17.893028259277344
+Epoch 54, finetune loss: 16.11635971069336
+Epoch 55, finetune loss: 37.40083694458008
+Epoch 56, finetune loss: 7877.3310546875
+Epoch 57, finetune loss: 1821.1307373046875
+Epoch 58, finetune loss: 500.2009582519531
+Epoch 59, finetune loss: 265.30633544921875
+Epoch 60, finetune loss: 101.81680297851562
+Epoch 61, finetune loss: 50.54574203491211
+Epoch 62, finetune loss: 37.19392776489258
+Epoch 63, finetune loss: 31.348203659057617
+Epoch 64, finetune loss: 28.082429885864258
+---> Finetuning with lr = 0.002
+Epoch 1, finetune loss: 896.647705078125
+Epoch 2, finetune loss: 245.1239471435547
+Epoch 3, finetune loss: 132.3080291748047
+Epoch 4, finetune loss: 103.44635009765625
+Epoch 5, finetune loss: 76.88233184814453
+Epoch 6, finetune loss: 83.72862243652344
+Epoch 7, finetune loss: 1061.5740966796875
+Epoch 8, finetune loss: 1720.80712890625
+Epoch 9, finetune loss: 677.570556640625
+Epoch 10, finetune loss: 281.70404052734375
+Epoch 11, finetune loss: 87.30126953125
+Epoch 12, finetune loss: 56.22312545776367
+Epoch 13, finetune loss: 49.84263229370117
+Epoch 14, finetune loss: 43.499271392822266
+Epoch 15, finetune loss: 41.532718658447266
+Epoch 16, finetune loss: 36.01560592651367
+Epoch 17, finetune loss: 31.882471084594727
+Epoch 18, finetune loss: 31.033262252807617
+Epoch 19, finetune loss: 27.36060905456543
+Epoch 20, finetune loss: 25.188262939453125
+Epoch 21, finetune loss: 25.759370803833008
+Epoch 22, finetune loss: 23.557689666748047
+Epoch 23, finetune loss: 21.02971649169922
+Epoch 24, finetune loss: 3822.424560546875
+Epoch 25, finetune loss: 1445.010009765625
+Epoch 26, finetune loss: 393.4966735839844
+Epoch 27, finetune loss: 123.86898803710938
+Epoch 28, finetune loss: 51.11539840698242
+Epoch 29, finetune loss: 42.70444107055664
+Epoch 30, finetune loss: 37.77311325073242
+Epoch 31, finetune loss: 31.466449737548828
+Epoch 32, finetune loss: 28.54874610900879
+Epoch 33, finetune loss: 25.838212966918945
+Epoch 34, finetune loss: 25.2176513671875
+Epoch 35, finetune loss: 24.542970657348633
+Epoch 36, finetune loss: 20.404312133789062
+Epoch 37, finetune loss: 19.052017211914062
+Epoch 38, finetune loss: 20.011310577392578
+Epoch 39, finetune loss: 19.014387130737305
+Epoch 40, finetune loss: 15.683277130126953
+Epoch 41, finetune loss: 13.916974067687988
+Epoch 42, finetune loss: 13.251802444458008
+Epoch 43, finetune loss: 71.80888366699219
+Epoch 44, finetune loss: 4404.29833984375
+Epoch 45, finetune loss: 990.80322265625
+Epoch 46, finetune loss: 241.8845672607422
+Epoch 47, finetune loss: 70.3436050415039
+Epoch 48, finetune loss: 48.31964874267578
+Epoch 49, finetune loss: 36.44816207885742
+Epoch 50, finetune loss: 31.38558006286621
+Epoch 51, finetune loss: 27.81602668762207
+Epoch 52, finetune loss: 23.835556030273438
+Epoch 53, finetune loss: 23.319313049316406
+Epoch 54, finetune loss: 22.40223503112793
+Epoch 55, finetune loss: 19.379947662353516
+Epoch 56, finetune loss: 17.888063430786133
+Epoch 57, finetune loss: 18.77669334411621
+Epoch 58, finetune loss: 18.241548538208008
+Epoch 59, finetune loss: 14.97817611694336
+Epoch 60, finetune loss: 15.243734359741211
+Epoch 61, finetune loss: 14.94416332244873
+Epoch 62, finetune loss: 14.602437973022461
+Epoch 63, finetune loss: 12.859395980834961
+Epoch 64, finetune loss: 12.936376571655273
+---> Finetuning with lr = 0.001
+Epoch 1, finetune loss: 809.8087158203125
+Epoch 2, finetune loss: 163.71820068359375
+Epoch 3, finetune loss: 114.8644790649414
+Epoch 4, finetune loss: 96.9994888305664
+Epoch 5, finetune loss: 83.98538208007812
+Epoch 6, finetune loss: 72.8315658569336
+Epoch 7, finetune loss: 64.44359588623047
+Epoch 8, finetune loss: 57.27621841430664
+Epoch 9, finetune loss: 50.959041595458984
+Epoch 10, finetune loss: 44.58869552612305
+Epoch 11, finetune loss: 40.5507698059082
+Epoch 12, finetune loss: 34.74594497680664
+Epoch 13, finetune loss: 32.42080307006836
+Epoch 14, finetune loss: 28.501598358154297
+Epoch 15, finetune loss: 26.33990478515625
+Epoch 16, finetune loss: 27.684410095214844
+Epoch 17, finetune loss: 556.6864013671875
+Epoch 18, finetune loss: 848.65771484375
+Epoch 19, finetune loss: 136.628662109375
+Epoch 20, finetune loss: 45.46878433227539
+Epoch 21, finetune loss: 33.093780517578125
+Epoch 22, finetune loss: 29.38498306274414
+Epoch 23, finetune loss: 27.359291076660156
+Epoch 24, finetune loss: 26.180715560913086
+Epoch 25, finetune loss: 22.453872680664062
+Epoch 26, finetune loss: 20.59423065185547
+Epoch 27, finetune loss: 19.366615295410156
+Epoch 28, finetune loss: 18.272361755371094
+Epoch 29, finetune loss: 17.412084579467773
+Epoch 30, finetune loss: 16.07782554626465
+Epoch 31, finetune loss: 15.742265701293945
+Epoch 32, finetune loss: 20.563581466674805
+Epoch 33, finetune loss: 18.106901168823242
+Epoch 34, finetune loss: 13.927050590515137
+Epoch 35, finetune loss: 13.381309509277344
+Epoch 36, finetune loss: 12.928634643554688
+Epoch 37, finetune loss: 13.390579223632812
+Epoch 38, finetune loss: 11.886456489562988
+Epoch 39, finetune loss: 12.308903694152832
+Epoch 40, finetune loss: 1171.891357421875
+Epoch 41, finetune loss: 404.39312744140625
+Epoch 42, finetune loss: 101.61219787597656
+Epoch 43, finetune loss: 28.50475311279297
+Epoch 44, finetune loss: 21.525243759155273
+Epoch 45, finetune loss: 19.01136589050293
+Epoch 46, finetune loss: 17.52657699584961
+Epoch 47, finetune loss: 16.122936248779297
+Epoch 48, finetune loss: 15.961621284484863
+Epoch 49, finetune loss: 14.590530395507812
+Epoch 50, finetune loss: 13.189748764038086
+Epoch 51, finetune loss: 12.458940505981445
+Epoch 52, finetune loss: 11.735891342163086
+Epoch 53, finetune loss: 11.992545127868652
+Epoch 54, finetune loss: 15.467083930969238
+Epoch 55, finetune loss: 370.9033508300781
+Epoch 56, finetune loss: 754.9506225585938
+Epoch 57, finetune loss: 192.17245483398438
+Epoch 58, finetune loss: 42.988338470458984
+Epoch 59, finetune loss: 20.688400268554688
+Epoch 60, finetune loss: 18.454103469848633
+Epoch 61, finetune loss: 16.351945877075195
+Epoch 62, finetune loss: 15.47346019744873
+Epoch 63, finetune loss: 14.270546913146973
+Epoch 64, finetune loss: 13.146251678466797
+===> Making soups
+===> Evaluating adversarial accuracy
+[Test] MEGASoup accuracy: natural 70.46%, adv 66.43%
+[Test] Soup accuracy: natural 69.33%, adv 65.75%
+[Test] Pretrain accuracy: natural 66.25%, adv 61.99%
+[Test] SWA-0.005 accuracy: natural 70.14%, adv 66.36%
+[Test] Finetune-0.005 accuracy: natural 68.57%, adv 64.06%
+[Test] SWA-0.004 accuracy: natural 70.36%, adv 66.52%
+[Test] Finetune-0.004 accuracy: natural 67.36%, adv 62.35%
+[Test] SWA-0.003 accuracy: natural 69.85%, adv 66.40%
+[Test] Finetune-0.003 accuracy: natural 69.59%, adv 65.57%
+[Test] SWA-0.002 accuracy: natural 69.74%, adv 65.85%
+[Test] Finetune-0.002 accuracy: natural 69.53%, adv 65.48%
+[Test] SWA-0.001 accuracy: natural 69.58%, adv 65.43%
+[Test] Finetune-0.001 accuracy: natural 69.49%, adv 65.30%
+[Train] MEGASoup accuracy: natural 98.97%, adv 99.73%
+[Train] Soup accuracy: natural 98.89%, adv 99.66%
+[Train] Pretrain accuracy: natural 90.76%, adv 95.30%
+[Train] SWA-0.005 accuracy: natural 98.02%, adv 99.73%
+[Train] Finetune-0.005 accuracy: natural 95.34%, adv 97.97%
+[Train] SWA-0.004 accuracy: natural 98.44%, adv 99.73%
+[Train] Finetune-0.004 accuracy: natural 94.00%, adv 96.42%
+[Train] SWA-0.003 accuracy: natural 99.07%, adv 99.66%
+[Train] Finetune-0.003 accuracy: natural 99.65%, adv 99.41%
+[Train] SWA-0.002 accuracy: natural 99.65%, adv 99.67%
+[Train] Finetune-0.002 accuracy: natural 99.91%, adv 99.46%
+[Train] SWA-0.001 accuracy: natural 99.76%, adv 99.65%
+[Train] Finetune-0.001 accuracy: natural 99.90%, adv 99.49%
+20602.73user 1353.43system 11:46:40elapsed 51%CPU (0avgtext+0avgdata 80969096maxresident)k
+0inputs+63944outputs (12major+98446626minor)pagefaults 0swaps
